@@ -137,52 +137,75 @@ namespace PuntajeClases
 
         }
         private static string IngresarDia(string v)
-        {
+         {
             Console.WriteLine(v);
-            String respuesta;
+            string[] respuesta= new string[2];
             respuesta = EsFormatoFecha(Console.ReadLine());
-            while(respuesta==null)
+            while(respuesta[1]==null)
             {
                 Console.WriteLine("Error, ingresa la fecha en formato dd/mm/aa");
                 respuesta = EsFormatoFecha(Console.ReadLine());
             }
 
-            return respuesta;
+            return respuesta[1];
 
         }
-        private static String EsFormatoFecha(string respuesta)
+        private static string[] EsFormatoFecha(string respuesta)
         {
-            String dia = respuesta ;
+            string[] retorno = {respuesta,null};
             int TAMANIO_FORMATO = 8;
 
-            if (respuesta.Length!=TAMANIO_FORMATO)
+            if (retorno[0].Length!=TAMANIO_FORMATO)
             {
 
-                if (respuesta.Length == TAMANIO_FORMATO - 1)
+                if (retorno[0].Length == TAMANIO_FORMATO - 1)
                 {
-                    if (respuesta.ToCharArray()[1].Equals('/') && respuesta.ToCharArray()[4].Equals('/'))
+                    if (retorno[0].ToCharArray()[4].Equals('/'))
                     {
-                        respuesta=respuesta.ToString();
-                        respuesta = "0" + respuesta;
+                        if (retorno[0].ToCharArray()[1].Equals('/'))
+                        {
+                            retorno[0] = "0" + retorno[0];
 
-                        return EsFormatoFecha(respuesta);
+                            return EsFormatoFecha(retorno[0]);
+                        }
+                        else if (retorno[0].ToCharArray()[2].Equals('/'))
+                        {
+                            retorno[0] = "0" + retorno[0];
+                            char[] caracteres = retorno[0].ToCharArray();
+                            char centinela = caracteres[1];
+                            int i = 3;
+                            char aux;
 
+                            while (caracteres[0] != centinela)
+                            {
+                                aux = caracteres[i];
+                                caracteres[i] = caracteres[0];
+                                caracteres[0] = aux;
+                                i--;
+                            }
+
+                            retorno[0] = new string(caracteres);
+
+                            return EsFormatoFecha(retorno[0]);
+                        }
                     }
                 }
-                return null;
+
+                return retorno;
+
             }
 
-            Char[] respuestaArray=respuesta.ToCharArray();
+            Char[] respuestaArray=retorno[0].ToCharArray();
 
             int cont = 0;
 
-            while(cont<TAMANIO_FORMATO && dia!=null)
+            while(cont<TAMANIO_FORMATO && retorno[0]!=null)
             {
                 if (cont == 2 || cont == 5)
                 {
                     if (!respuestaArray[cont].Equals('/'))
                     {
-                        dia = null;
+                        retorno[0] = null;
                     }
 
                 }
@@ -191,7 +214,7 @@ namespace PuntajeClases
 
                     if (char.IsLetter(respuestaArray[cont]))
                     {
-                        dia = null;
+                        retorno[0] = null;
                     }
                 }
 
@@ -199,7 +222,9 @@ namespace PuntajeClases
 
             }
 
-            return dia;
+            retorno[1] = retorno[0];
+
+            return retorno;
 
         }
         private static bool EsCateg(string rta)

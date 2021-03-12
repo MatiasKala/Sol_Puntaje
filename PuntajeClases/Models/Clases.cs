@@ -15,7 +15,7 @@ namespace PuntajeClases.Models
         public string Mostrar()
         {
             CategoriaNavigation = context.Materias.Find(Categoria);
-            return"Materia :" + CategoriaNavigation.Descripcion + "\nDia clase :" + DiaClase + "\nPuntaje :" + Puntaje + "\nComentario  "+Comentario;
+            return "Materia :" + CategoriaNavigation.Descripcion + "\nDia clase :" + DiaClase + "\nPuntaje :" + Puntaje + "\nComentario  "+Comentario;
             
         }
     }
