@@ -251,18 +251,19 @@ namespace PuntajeClases
             Console.WriteLine("2. Mostrar todas las clases de algun mes");
             Console.WriteLine("3. Obtener mejor clase de algun mes");
             Console.WriteLine("4. Obtener mejor clase de algun año");
-            Console.WriteLine("5. Mostrar promedio de puntaje del mes");
-            Console.WriteLine("6. Mostrar promedio de puntaje del año");
-            Console.WriteLine("7. Mostrar promedio por materia");
-            Console.WriteLine("8. Mostrar todos los promedios por materia");
-            Console.WriteLine("9. Mostrar mejor clase por materia");
-            Console.WriteLine("10. Mostrar materia con mejor promedio de puntaje por clase");
-            Console.WriteLine("11. Mostrar informacion de materias");
-            Console.WriteLine("12. Mostrar materias por cuatrimestre");
-            Console.WriteLine("13. Mostrar profesores");
+            Console.WriteLine("5. Obtener mejor clase de todos los tiempos");
+            Console.WriteLine("6. Mostrar promedio de puntaje del mes");
+            Console.WriteLine("7. Mostrar promedio de puntaje del año");
+            Console.WriteLine("8. Mostrar promedio por materia");
+            Console.WriteLine("9. Mostrar todos los promedios por materia");
+            Console.WriteLine("10. Mostrar mejor clase por materia");
+            Console.WriteLine("11. Mostrar materia con mejor promedio de puntaje por clase");
+            Console.WriteLine("12. Mostrar informacion de materias");
+            Console.WriteLine("13. Mostrar materias por cuatrimestre");
+            Console.WriteLine("14. Mostrar profesores");
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("\n");
-            int rta = IngresoRespuesta(1, 13);
+            int rta = IngresoRespuesta(1, 13,99);
             int mes;
             int cuatri;
 
@@ -290,38 +291,44 @@ namespace PuntajeClases
                         MostrarMejorClaseAño(IngresoRespuesta(RANGO_ANIOS[0], RANGO_ANIOS[1]));
                         break;
                     case 5:
+                        MostrarMejorClaseDeSiempre();
+                        break;
+                    case 6:
                         Console.WriteLine("De que mes queres ver el promedio?");
                         mes = IngresoRespuesta(1, 12);
                         Console.WriteLine("Y de que año?");
                         MostrarPromedioClaseMes(mes, IngresoRespuesta(RANGO_ANIOS[0], RANGO_ANIOS[1]));
                         break;
-                    case 6:
+                    case 7:
                         Console.WriteLine("De que año queres ver el promedio?");
                         MostrarPromedioClaseAno(IngresoRespuesta(RANGO_ANIOS[0], RANGO_ANIOS[1]));
                         break;
-                    case 7:
+                    case 8:
                         MostrarPromedioClaseMateria(IngresarCategoria("De que materia queres ver el promedio?"));
                         break;
-                    case 8:
+                    case 9:
                         MostrarTodosLosPromedios();
                         break;
-                    case 9:
+                    case 10:
                         MostrarMejorClasePorCateg(IngresarCategoria("De que materia queres ver la mejor ? "));
                         break;
-                    case 10:
+                    case 11:
                         MostrarMejorMateria();
                         break;
-                    case 11:
+                    case 12:
                         MostrarInfoMaterias();
                         break;
-                    case 12:
+                    case 13:
                         Console.WriteLine("De que cuatri queres ver las materias?");
                         cuatri = IngresoRespuesta(1, 2);
                         Console.WriteLine("Y de que año?");
                         MostrarMateriasPorCuatrimestre(cuatri, IngresoRespuesta(RANGO_ANIOS[0], RANGO_ANIOS[1]));
                         break;
-                    case 13:
+                    case 14:
                         MostrarProfesores();
+                        break;
+                    case 99:
+                        OpcionSecreta();
                         break;
                 }
             }
@@ -332,6 +339,7 @@ namespace PuntajeClases
             }
          
         }
+
         private static void MostrarTodosLosPromedios()
         {
 
@@ -687,6 +695,23 @@ namespace PuntajeClases
             }
 
         }
+        private static void MostrarMejorClaseDeSiempre()
+        {
+            List<Clases> clases = context.Clases.ToList();
+
+            if (clases.Count != 0)
+            {
+                List<Clases> mejorClase = ObtenerMejorClase(clases);
+
+                Console.WriteLine("Esta/s son la/s clases con mejor puntuacion:\n");
+
+                foreach (Clases c in mejorClase)
+                {
+                    Console.WriteLine(c.Mostrar() + "\n");
+                }
+            }
+
+        }
         private static void MostrarClasesMes(int month, int year)
         {
 
@@ -889,6 +914,80 @@ namespace PuntajeClases
             }
 
         }
+        private static Clases[] ObtenerClasesOrdenadas()
+        {
+            int cantidad = context.Clases.Count()-1;
+
+            Clases[] clases = context.Clases.ToArray();
+
+            Clases aux;
+
+            for (int i = 0; i < cantidad; i++)
+            {
+                for (int j = 0; j < cantidad; j++)
+                {
+                    if (EsFechaMayor(clases[j], clases[j + 1]))
+                    {
+                        aux = clases[j];
+                        clases[j] = clases[j + 1];
+                        clases[j + 1] = aux;
+                    }
+                }
+            }
+
+            return clases;
+        }
+        private static bool EsFechaMayor(Clases clases1, Clases clases2)
+        {
+            bool ok = false;
+
+            char[] fecha1 = clases1.DiaClase.ToCharArray();
+            char[] fecha2 = clases2.DiaClase.ToCharArray();
+
+            int anio1 = ConseguirNumeroPorArray(fecha1,6,7);
+            int anio2 = ConseguirNumeroPorArray(fecha2,6,7);
+
+
+            if (anio1 > anio2)
+            {
+                ok = true;
+
+            } 
+            else if (anio1 == anio2)
+            {
+                int mes1 = ConseguirNumeroPorArray(fecha1, 3, 4);
+                int mes2 = ConseguirNumeroPorArray(fecha2, 3, 4);
+
+                if (mes1 > mes2)
+                {
+                    ok = true;
+
+                }
+                else if (mes1 == mes2)
+                {
+                    int dia1 = ConseguirNumeroPorArray(fecha1, 0, 1);
+                    int dia2 = ConseguirNumeroPorArray(fecha2, 0, 1);
+
+                    if (dia1 > dia2)
+                    {
+                        ok = true;
+
+                    }
+
+                }
+
+            }
+
+            return ok;
+        }
+        private static int ConseguirNumeroPorArray(char[] fecha, int posicion1, int posicion2)
+        {
+            int decena = int.Parse(fecha[posicion1].ToString()) * 10;
+            int unidad = int.Parse(fecha[posicion2].ToString());
+
+            return decena + unidad;
+        }
+
         //----------------------------------------------------------
         // EMPIEZAN LAS FUNCIONES PARA CARGAR MATERIAS  
         //----------------------------------------------------------
@@ -1130,6 +1229,28 @@ namespace PuntajeClases
 
             return rta;
         }
+        public static int IngresoRespuesta(int min, int max,int excepcion)
+        {
+            int rta = 0;
+
+            do
+            {
+                try
+                {
+                    Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
+                    rta = int.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("NUMERO DIJE!!!!");
+                }
+
+            } while (rta < min || rta > max && rta !=excepcion);
+
+            Console.WriteLine("\n");
+
+            return rta;
+        }
         public static int IngresoRespuesta(int min, int max,string v)
         {
             int rta = 0;
@@ -1181,6 +1302,25 @@ namespace PuntajeClases
             }
 
             return rta.ToUpper();
+        }
+        private static void OpcionSecreta()
+        {
+            Console.WriteLine("Ah jajajja la opcion secreta? Toca lo que sea");
+            Console.ReadLine();
+            Clases[] todasLasClases = ObtenerClasesOrdenadas();
+
+            int i = 1;
+
+            foreach (Clases c in todasLasClases)
+            {
+                string s = i + ".    " + c.Mostrar();
+                Console.WriteLine(s + "\n");
+                i = i + 1;
+            }
+
+            i = i - 1;
+
+            Console.WriteLine("Cantidad de clases cargadas: " + i);
         }
     }
 }
