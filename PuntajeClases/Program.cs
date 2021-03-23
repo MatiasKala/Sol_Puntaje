@@ -28,9 +28,10 @@ namespace PuntajeClases
                     Console.WriteLine("1. Consultar datos");
                     Console.WriteLine("2. Cargar Nueva Clase");
                     Console.WriteLine("3. Cargar Informacion de Materias");
-                    Console.WriteLine("4. Fin del programa");
+                    Console.WriteLine("4. Generar BackUp de datos");
+                    Console.WriteLine("5. Fin del programa");
 
-                    ingresoRespuesta = IngresoRespuesta(1, 4);
+                    ingresoRespuesta = IngresoRespuesta(1, 5);
                     
                     if (ingresoRespuesta == 1)
                     {
@@ -263,7 +264,7 @@ namespace PuntajeClases
             Console.WriteLine("14. Mostrar profesores");
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("\n");
-            int rta = IngresoRespuesta(1, 13,99);
+            int rta = IngresoRespuesta(1, 14,99,100);
             int mes;
             int cuatri;
 
@@ -329,6 +330,9 @@ namespace PuntajeClases
                         break;
                     case 99:
                         OpcionSecreta();
+                        break;
+                    case 100:
+                        OpcionSecreta2();
                         break;
                 }
             }
@@ -989,7 +993,7 @@ namespace PuntajeClases
         }
 
         //----------------------------------------------------------
-        // EMPIEZAN LAS FUNCIONES PARA CARGAR MATERIAS  
+        // EMPIEZAN LAS FUNCIONES PARA MODIFICAR MATERIAS  
         //----------------------------------------------------------
 
         private static void ModificarMaterias()
@@ -1211,10 +1215,14 @@ namespace PuntajeClases
         {
             int rta = 0;
 
-            do
+            Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
+            rta = int.Parse(Console.ReadLine());
+
+            while (rta < min || rta > max)
             {
                 try
                 {
+                    Console.WriteLine("Error, bobo");
                     Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
                     rta = int.Parse(Console.ReadLine());
                 }
@@ -1222,21 +1230,24 @@ namespace PuntajeClases
                 {
                     Console.WriteLine("NUMERO DIJE!!!!");
                 }
-
-            } while (rta < min || rta > max);
+            }
 
             Console.WriteLine("\n");
 
             return rta;
         }
-        public static int IngresoRespuesta(int min, int max,int excepcion)
+        public static int IngresoRespuesta(int min, int max,int excepcion1,int excepcion2)
         {
             int rta = 0;
 
-            do
+            Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
+            rta = int.Parse(Console.ReadLine());
+
+            while (rta < min || rta > max && rta != excepcion1 && rta != excepcion2)
             {
                 try
                 {
+                    Console.WriteLine("Error, bobo");
                     Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
                     rta = int.Parse(Console.ReadLine());
                 }
@@ -1244,8 +1255,7 @@ namespace PuntajeClases
                 {
                     Console.WriteLine("NUMERO DIJE!!!!");
                 }
-
-            } while (rta < min || rta > max && rta !=excepcion);
+            }
 
             Console.WriteLine("\n");
 
@@ -1256,11 +1266,14 @@ namespace PuntajeClases
             int rta = 0;
 
             Console.WriteLine(v);
+            Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
+            rta = int.Parse(Console.ReadLine());
 
-            do
+            while (rta < min || rta > max)
             {
                 try
                 {
+                    Console.WriteLine("Error, bobo");
                     Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
                     rta = int.Parse(Console.ReadLine());
                 }
@@ -1268,8 +1281,7 @@ namespace PuntajeClases
                 {
                     Console.WriteLine("NUMERO DIJE!!!!");
                 }
-
-            } while (rta < min || rta > max);
+            }
 
             Console.WriteLine("\n");
 
@@ -1321,6 +1333,39 @@ namespace PuntajeClases
             i = i - 1;
 
             Console.WriteLine("Cantidad de clases cargadas: " + i);
+        }
+        private static void OpcionSecreta2()
+        {
+            //MEJORAR FUNCION
+
+            Console.WriteLine("Que clase borramos? Ingresa el ID (nrodia+nromes+nroaño+nroclasedeldia)");
+
+            int id = int.Parse(Console.ReadLine());
+
+            try
+            {
+
+                var query = from c in context.Clases
+                        where c.Id==id  
+                        select c;
+
+                var clase = query.FirstOrDefault<Clases>();
+
+                if(IngresoRespuesta(1,2,"Seguro q queres borrar clase del dia "+clase.DiaClase+" categoria "+clase.Categoria+"\n Ingresa 1 si si 2 si NO") == 1)
+                {
+                    context.Remove(clase);
+
+                    context.SaveChanges();
+
+                    Console.WriteLine("Borrada");
+
+                }
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message,e.InnerException);
+            }
         }
     }
 }
