@@ -32,17 +32,21 @@ namespace PuntajeClases
                     Console.WriteLine("5. Fin del programa");
 
                     ingresoRespuesta = IngresoRespuesta(1, 5);
-                    
-                    if (ingresoRespuesta == 1)
+
+                    switch (ingresoRespuesta)
                     {
-                        VerDatos();
-                    }
-                    else if (ingresoRespuesta == 2)
-                    {
-                        CargarClase();
-                    }else if(ingresoRespuesta == 3)
-                    {
-                        ModificarMaterias();
+                        case 1:
+                            VerDatos();
+                            break;
+                        case 2:
+                            CargarClase();
+                            break;
+                        case 3:
+                            ModificarMaterias();
+                            break;
+                        case 4:
+                            CrearBackUp();
+                            break;
                     }
 
                 }
@@ -156,9 +160,9 @@ namespace PuntajeClases
             string[] retorno = {respuesta,null};
             int TAMANIO_FORMATO = 8;
 
-            if (retorno[0].Length!=TAMANIO_FORMATO)
+            if (retorno[0].Length!=TAMANIO_FORMATO && !retorno[0].Equals("hoy", StringComparison.InvariantCultureIgnoreCase))
             {
-
+                
                 if (retorno[0].Length == TAMANIO_FORMATO - 1)
                 {
                     if (retorno[0].ToCharArray()[4].Equals('/'))
@@ -196,6 +200,13 @@ namespace PuntajeClases
 
             }
 
+            if(retorno[0].Length == 3)
+            {
+                retorno[1] = GenerarDiaDeHoyFormato();
+
+                return retorno;
+            }
+
             Char[] respuestaArray=retorno[0].ToCharArray();
 
             int cont = 0;
@@ -227,6 +238,16 @@ namespace PuntajeClases
 
             return retorno;
 
+        }
+        private static string GenerarDiaDeHoyFormato()
+        {
+            DateTime hoy = DateTime.Now;
+
+            string miVariable = hoy.ToString("dd/MM/yyyy");
+
+            miVariable=miVariable.Remove(6,2);
+
+            return miVariable;
         }
         private static bool EsCateg(string rta)
         {
@@ -343,7 +364,6 @@ namespace PuntajeClases
             }
          
         }
-
         private static void MostrarTodosLosPromedios()
         {
 
@@ -1203,7 +1223,7 @@ namespace PuntajeClases
             }
             else
             {
-                Console.WriteLine("Se guardo todo piola Mati, buen " + wk);
+                Console.WriteLine("Todo hecho. Nos vemos Mati, buen  " + wk);
             }
         }
         private static string Ingresar(string v)
@@ -1338,7 +1358,7 @@ namespace PuntajeClases
         {
             //MEJORAR FUNCION
 
-            Console.WriteLine("Que clase borramos? Ingresa el ID (nrodia+nromes+nroaño+nroclasedeldia)");
+            Console.WriteLine("Que clase borramos o Editamos? Ingresa el ID (nrodia+nromes+nroaño+nroclasedeldia)");
 
             int id = int.Parse(Console.ReadLine());
 
@@ -1351,14 +1371,22 @@ namespace PuntajeClases
 
                 var clase = query.FirstOrDefault<Clases>();
 
-                if(IngresoRespuesta(1,2,"Seguro q queres borrar clase del dia "+clase.DiaClase+" categoria "+clase.Categoria+"\n Ingresa 1 si si 2 si NO") == 1)
+                if (clase != null)
                 {
-                    context.Remove(clase);
+                    if (IngresoRespuesta(1, 2, "Que queres hacer con esta clase? Borrar o Editar?. Ingresa 1 para borrar 2 para editar") == 1)
+                    {
+                        
+                        BorrarClase(clase);
 
-                    context.SaveChanges();
-
-                    Console.WriteLine("Borrada");
-
+                    }
+                    else
+                    {
+                        EditarClase(clase);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("La clase no existe");
                 }
 
             }
@@ -1367,5 +1395,75 @@ namespace PuntajeClases
                 Console.WriteLine(e.Message,e.InnerException);
             }
         }
+        private static void EditarClase(Clases clase)
+        {
+            int eleccion = IngresoRespuesta(0, 4, "Que modificamos de " + clase.Id + "?\n" +
+                "0.Salir\n" +
+                "1.Dia de la clase\n" +
+                "2.Materia\n" +
+                "3.Puntaje de la clase\n" +
+                "4.Comentario");
+
+            while (eleccion != 0)
+            {
+                switch (eleccion)
+                {
+                    case 1:
+                        clase.DiaClase = IngresarDia("Ingrese el nuevo dia de la clase");
+                        break;
+                    case 2:
+                        clase.Categoria = IngresarCategoria("Ingrese la abreviatura de la materia (Ej:TP1)");
+                        break;
+                    case 3:
+                        clase.Puntaje = IngresarPuntaje("Ingresa el nuevo puntaje de la clase (1 al 10)");
+                        break;
+                    case 4:
+                        clase.Comentario = Ingresar("Modifique el comentario");
+                        break;
+                }
+                eleccion = IngresoRespuesta(0, 4, "Desea cambiar algo mas?\n" +
+                "0.Salir\n" +
+                "1.Dia de la clase\n" +
+                "2.Materia\n" +
+                "3.Puntaje de la clase\n" +
+                "4.Comentario");
+            }
+
+            try
+            {
+                context.Clases.Update(clase);
+
+                context.SaveChanges();
+
+                Console.WriteLine("Se logra editar la clase de " + clase.Categoria);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.GetType());
+
+                Console.WriteLine("Se rompio algo pa, trata otra vez");
+            }
+        }
+        private static void BorrarClase(Clases clase)
+        {
+            if(IngresoRespuesta(1,2,"Seguro que queres borrar la clase de "+clase.Categoria+" del dia "+clase.DiaClase+".\n1. SI 2. NO") == 1) {
+
+            context.Remove(clase);
+
+            context.SaveChanges();
+
+            Console.WriteLine("Borrada");
+            }
+        }
+
+        //----------------------------------------------------------
+        // BACK UP   
+        //----------------------------------------------------------
+        private static void CrearBackUp()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
