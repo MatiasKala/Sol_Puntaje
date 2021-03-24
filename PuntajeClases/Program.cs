@@ -1562,7 +1562,7 @@ namespace PuntajeClases
         {
             for(int i = 1; i < 5; i++)
             {
-                w.Cells[i, 1] = GetValorTitulo(i);
+                w.Cells[1, i] = GetValorTitulo(i);
             }
         }
         private static dynamic GetValorTitulo(int i)
@@ -1621,7 +1621,7 @@ namespace PuntajeClases
         {
             for (int i = 1; i < 5; i++)
             {
-                w.Cells[i, 1] = GetValorTitulo(i+4);
+                w.Cells[1, i] = GetValorTitulo(i+4);
             }
         }
     }
