@@ -148,14 +148,14 @@ namespace PuntajeClases
             respuesta = EsFormatoFecha(Console.ReadLine());
             while(respuesta[1]==null)
             {
-                Console.WriteLine("Error, ingresa la fecha en formato dd/mm/aa");
+                Console.WriteLine("Error, "+respuesta[0]+" no es una fecha valida.\nIngrese una fecha valida en formato dd/mm/aa");
                 respuesta = EsFormatoFecha(Console.ReadLine());
             }
 
             return respuesta[1];
 
         }
-        private static string[] EsFormatoFecha(string respuesta)
+        private static string[] EsFormatoFecha(string respuesta)    
         {
             string[] retorno = {respuesta,null};
             int TAMANIO_FORMATO = 8;
@@ -234,7 +234,8 @@ namespace PuntajeClases
 
             }
 
-            retorno[1] = retorno[0];
+            if (EsFechaValida(respuestaArray))
+                retorno[1] = retorno[0];
 
             return retorno;
 
@@ -249,6 +250,49 @@ namespace PuntajeClases
 
             return miVariable;
         }
+        private static bool EsFechaValida(Char[] fecha)
+        {
+
+            bool ok = false;
+            int anio = Int32.Parse((new string("" + fecha[6] + "" + fecha[7]))) + 2000;
+
+            if(anio >=DateTime.Now.Year && anio < RANGO_ANIOS[1])
+            {
+                int mes = Int32.Parse((new string("" + fecha[3] + "" + fecha[4])));
+
+                if (mes > 0 && mes < 12)
+                {
+                    int dia = Int32.Parse((new string("" + fecha[0] + "" + fecha[1])));
+
+                    if (dia > 0 && dia <= ObtenerNumerosDeDiaPorMes(mes))
+                        ok = true;
+                }
+            }
+
+            return ok;
+
+        }
+        private static int ObtenerNumerosDeDiaPorMes(int mes)
+        {
+            int num=0;
+
+            if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12)
+            {
+                num = 31;
+            }
+            else if (mes == 4 || mes == 6 || mes == 9 || mes == 11)
+            {
+                num = 30;
+            }
+            else if (mes == 2)
+            {
+                num = (DateTime.IsLeapYear(DateTime.Now.Year)) ?  num=29 : num = 28;
+            }
+
+            return num;
+
+        }
+
         private static bool EsCateg(string rta)
         {
            Materias mat = context.Materias.Find(rta);
