@@ -14,9 +14,13 @@ namespace PuntajeClases.Models
         public virtual Materias CategoriaNavigation { get; set; }
         public string Mostrar()
         {
-            CategoriaNavigation = context.Materias.Find(Categoria);
+            setCategoriaNavigation();
             return "Materia :" + CategoriaNavigation.Descripcion + "\nDia clase :" + DiaClase + "\nPuntaje :" + Puntaje + "\nComentario  "+Comentario;
             
+        }
+        public void setCategoriaNavigation()
+        {
+            this.CategoriaNavigation = context.Materias.Find(Categoria);
         }
     }
 }

@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Microsoft.Office.Interop.Excel;
+using _excel = Microsoft.Office.Interop.Excel;
 
 namespace PuntajeClases
 {
@@ -16,7 +18,7 @@ namespace PuntajeClases
         static ClasesContext context = new ClasesContext();
         public static void Main(string[] args)
         {
-            const int FIN_PROGRAMA= 4;
+            const int FIN_PROGRAMA= 5;
             int ingresoRespuesta = -1;
             Console.WriteLine("Buen dia Mati");
 
@@ -53,7 +55,7 @@ namespace PuntajeClases
                 catch (Exception e)
                 {
                     Console.WriteLine(e.GetType());
-                    Console.WriteLine("NO VES QUE ROMPISTE ALGO, QUE HICISTE AHORA TARADO");
+                    Console.WriteLine("NO VES QUE ROMPISTE ALGO, QUE HICISTE AHORA?");
                 }
                 Console.WriteLine("---------------------------------------------------------------------------------------");
             }
@@ -292,7 +294,6 @@ namespace PuntajeClases
             return num;
 
         }
-
         private static bool EsCateg(string rta)
         {
            Materias mat = context.Materias.Find(rta);
@@ -1286,7 +1287,7 @@ namespace PuntajeClases
             {
                 try
                 {
-                    Console.WriteLine("Error, bobo");
+                    Console.WriteLine("Error capo");
                     Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
                     rta = int.Parse(Console.ReadLine());
                 }
@@ -1311,7 +1312,7 @@ namespace PuntajeClases
             {
                 try
                 {
-                    Console.WriteLine("Error, bobo");
+                    Console.WriteLine("Error, nada que ver jajaj");
                     Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
                     rta = int.Parse(Console.ReadLine());
                 }
@@ -1337,7 +1338,7 @@ namespace PuntajeClases
             {
                 try
                 {
-                    Console.WriteLine("Error, bobo");
+                    Console.WriteLine("Error, deja de mandar fruta");
                     Console.WriteLine("Ingresa un numero entre " + min + " y " + max);
                     rta = int.Parse(Console.ReadLine());
                 }
@@ -1358,7 +1359,7 @@ namespace PuntajeClases
 
             while (rta.Length != 3 || !EsCateg(rta.ToUpper()))
             {
-                Console.WriteLine("No existe " + rta + " bobo");
+                Console.WriteLine("No existe " + rta + " capo");
                 Console.WriteLine("Ingresa una categoria valida (3 letras, ej: nt1)");
                 rta = Console.ReadLine();
             }
@@ -1372,7 +1373,7 @@ namespace PuntajeClases
 
             while (rta.Length != 3)
             {
-                Console.WriteLine( rta + "no es aceptable bobo");
+                Console.WriteLine( rta + "??? Flasheaste feo");
                 Console.WriteLine("Ingresa una categoria valida (3 letras, ej: nt1)");
                 rta = Console.ReadLine();
             }
@@ -1506,8 +1507,122 @@ namespace PuntajeClases
         //----------------------------------------------------------
         private static void CrearBackUp()
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                Application app = new Application();
+                Workbook workbook = app.Workbooks.Add();
+                Worksheet worksheet1 = workbook.Worksheets[1];
+                Worksheet worksheet2 = workbook.Worksheets.Add();
 
+                worksheet1.Name = "Clases";
+                worksheet2.Name = "Materias";
+
+                CrearBackUpClases(worksheet1);
+                CrearBackUpMaterias(worksheet2);
+
+                string diaDelBackUp =DateTime.Now.ToString("dd_MM_yyyy__HH_mm");
+                diaDelBackUp = diaDelBackUp.Insert(14, "hs");
+                diaDelBackUp = diaDelBackUp.Insert(diaDelBackUp.Length, "mins");
+                diaDelBackUp = "Back up " + diaDelBackUp;
+
+                workbook.SaveAs(@"C:\Users\matia\source\repos\Sol_Puntaje\PuntajeClases\BackUps\"+diaDelBackUp+".xlsx");
+                workbook.Close();
+                app.Quit();
+                Console.WriteLine(diaDelBackUp + ".xlsx creado");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Algo falló \n"+e.Message);
+            }
+
+        }
+        private static void CrearBackUpClases(Worksheet worksheet1)
+        {
+            CrearTitulosBackUpClases(worksheet1);
+
+            Clases[] todasLasClases = ObtenerClasesOrdenadas();
+
+            int cantidadClases = todasLasClases.Length;
+            int contClases = 0;
+
+            for (int row = 2; row < cantidadClases + 2; row++)
+            {
+
+                worksheet1.Cells[row, 1] = todasLasClases[contClases].DiaClase;
+                worksheet1.Cells[row, 2] = todasLasClases[contClases].Categoria;
+                worksheet1.Cells[row, 3] = todasLasClases[contClases].Puntaje;
+                worksheet1.Cells[row, 4] = todasLasClases[contClases].Comentario;
+
+                contClases++;
+
+            }
+
+        }
+        private static void CrearTitulosBackUpClases(Worksheet w)
+        {
+            for(int i = 1; i < 5; i++)
+            {
+                w.Cells[i, 1] = GetValorTitulo(i);
+            }
+        }
+        private static dynamic GetValorTitulo(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    return "Dia Clase";
+                case 2:
+                    return "Materia";
+                case 3:
+                    return "Puntaje";
+                case 4:
+                    return "Comentario";
+                case 5:
+                    return "Categoria";
+                case 6:
+                    return "Descripcion";
+                case 7:
+                    return "Profesor";
+                case 8:
+                    return "Ayudante";
+                case 9:
+                    return "Año";
+                case 10:
+                    return "Periodo";
+            }
+
+            return null;
+            
+        }
+        private static void CrearBackUpMaterias(Worksheet worksheet2)
+        {
+            CrearTitulosBackUpMaterias(worksheet2);
+
+            Materias[] materias = context.Materias.ToArray<Materias>();
+
+            int cantidadMaterias = materias.Length;
+            int contMaterias = 0;
+
+            for (int row = 2; row < cantidadMaterias + 2; row++)
+            {
+
+                worksheet2.Cells[row, 1] = materias[contMaterias].Categoria;
+                worksheet2.Cells[row, 2] = materias[contMaterias].Descripcion;
+                worksheet2.Cells[row, 3] = materias[contMaterias].Profesor;
+                worksheet2.Cells[row, 4] = materias[contMaterias].Ayudante;
+                worksheet2.Cells[row, 5] = materias[contMaterias].Anio;
+                worksheet2.Cells[row, 6] = materias[contMaterias].TiempoAnio;
+
+                contMaterias++;
+
+            }
+        }
+        private static void CrearTitulosBackUpMaterias(Worksheet w)
+        {
+            for (int i = 1; i < 5; i++)
+            {
+                w.Cells[i, 1] = GetValorTitulo(i+4);
+            }
+        }
     }
 }
