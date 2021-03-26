@@ -162,7 +162,8 @@ namespace PuntajeClases
             string[] retorno = {respuesta,null};
             int TAMANIO_FORMATO = 8;
 
-            if (retorno[0].Length!=TAMANIO_FORMATO && !retorno[0].Equals("hoy", StringComparison.InvariantCultureIgnoreCase))
+            if (retorno[0].Length!=TAMANIO_FORMATO && !retorno[0].Equals("hoy", StringComparison.InvariantCultureIgnoreCase)
+                && !retorno[0].Equals("ayer", StringComparison.InvariantCultureIgnoreCase))
             {
                 
                 if (retorno[0].Length == TAMANIO_FORMATO - 1)
@@ -202,7 +203,13 @@ namespace PuntajeClases
 
             }
 
-            if(retorno[0].Length == 3)
+            if(retorno[0].Length == 4)
+            {
+                retorno[1] = GenerarDiaDeAyerFormato();
+
+                return retorno;
+            } 
+            else if (retorno[0].Length == 3)
             {
                 retorno[1] = GenerarDiaDeHoyFormato();
 
@@ -246,12 +253,20 @@ namespace PuntajeClases
         {
             DateTime hoy = DateTime.Now;
 
-            string miVariable = hoy.ToString("dd/MM/yyyy");
-
-            miVariable=miVariable.Remove(6,2);
+            string miVariable = hoy.ToString("dd/MM/yy");
 
             return miVariable;
         }
+        private static string GenerarDiaDeAyerFormato()
+        {
+            DateTime ayer = DateTime.Today.AddDays(-1);
+
+            string miVariable = ayer.ToString("dd/MM/yy");
+
+            return miVariable;
+        }
+
+ 
         private static bool EsFechaValida(Char[] fecha)
         {
 
