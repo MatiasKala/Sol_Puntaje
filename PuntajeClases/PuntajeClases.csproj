@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="BackUps\" />
-    <Folder Include="Unused\" />
   </ItemGroup>
 
 </Project>

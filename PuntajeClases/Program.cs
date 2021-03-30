@@ -77,6 +77,7 @@ namespace PuntajeClases
             c.DiaClase = IngresarDia("Que dia es hoy?");
             c.Categoria = IngresarCategoria("Que tuviste hoy?");
             c.Puntaje = IngresarPuntaje("Del 1 al 10, cuanto estuvo la clase?");
+            c.FueGrabada = IngresoRespuesta(0,1,"Se grabo la clase? 0 para NO, 1 para SI")==0 ? false: true;
             c.Comentario = Ingresar("Algun comentario extra?");
             c.Id = GenerarId(c.DiaClase);
 
@@ -265,8 +266,6 @@ namespace PuntajeClases
 
             return miVariable;
         }
-
- 
         private static bool EsFechaValida(Char[] fecha)
         {
 
@@ -1457,12 +1456,13 @@ namespace PuntajeClases
         }
         private static void EditarClase(Clases clase)
         {
-            int eleccion = IngresoRespuesta(0, 4, "Que modificamos de " + clase.Id + "?\n" +
+            int eleccion = IngresoRespuesta(0, 4, "Que modificamos de la clase " + clase.Categoria+" "+clase.DiaClase + "?\n" +
                 "0.Salir\n" +
                 "1.Dia de la clase\n" +
                 "2.Materia\n" +
                 "3.Puntaje de la clase\n" +
-                "4.Comentario");
+                "4.Fue grabada\n" +
+                "5.Comentario");
 
             while (eleccion != 0)
             {
@@ -1478,6 +1478,9 @@ namespace PuntajeClases
                         clase.Puntaje = IngresarPuntaje("Ingresa el nuevo puntaje de la clase (1 al 10)");
                         break;
                     case 4:
+                        clase.FueGrabada = IngresoRespuesta(0, 1, "Se grabo la clase? 0 para NO, 1 para SI") == 0 ? false : true;
+                        break; 
+                    case 5:
                         clase.Comentario = Ingresar("Modifique el comentario");
                         break;
                 }
@@ -1486,7 +1489,8 @@ namespace PuntajeClases
                 "1.Dia de la clase\n" +
                 "2.Materia\n" +
                 "3.Puntaje de la clase\n" +
-                "4.Comentario");
+                "4.Fue grabada\n"+
+                "5.Comentario");
             }
 
             try
@@ -1567,6 +1571,7 @@ namespace PuntajeClases
                 worksheet1.Cells[row, 2] = todasLasClases[contClases].Categoria;
                 worksheet1.Cells[row, 3] = todasLasClases[contClases].Puntaje;
                 worksheet1.Cells[row, 4] = todasLasClases[contClases].Comentario;
+                worksheet1.Cells[row, 5] = todasLasClases[contClases].FueGrabada;
 
                 contClases++;
 
@@ -1575,7 +1580,7 @@ namespace PuntajeClases
         }
         private static void CrearTitulosBackUpClases(Worksheet w)
         {
-            for(int i = 1; i < 5; i++)
+            for(int i = 1; i < 6; i++)
             {
                 w.Cells[1, i] = GetValorTitulo(i);
             }
@@ -1593,16 +1598,18 @@ namespace PuntajeClases
                 case 4:
                     return "Comentario";
                 case 5:
-                    return "Categoria";
+                    return "Fue Grabada?";
                 case 6:
-                    return "Descripcion";
+                    return "Categoria";
                 case 7:
-                    return "Profesor";
+                    return "Descripcion";
                 case 8:
-                    return "Ayudante";
+                    return "Profesor";
                 case 9:
-                    return "Año";
+                    return "Ayudante";
                 case 10:
+                    return "Año";
+                case 11:
                     return "Periodo";
             }
 
@@ -1636,7 +1643,7 @@ namespace PuntajeClases
         {
             for (int i = 1; i < 5; i++)
             {
-                w.Cells[1, i] = GetValorTitulo(i+4);
+                w.Cells[1, i] = GetValorTitulo(i+5);
             }
         }
     }

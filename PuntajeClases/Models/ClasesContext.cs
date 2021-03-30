@@ -23,7 +23,8 @@ namespace PuntajeClases.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=LAPTOP-MATI\\SQLEXPRESS;Initial Catalog=Clases;Integrated Security=True; ");
+                optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-MATI\SQLEXPRESS;Initial Catalog=Clases;Integrated Security=True;
+");
             }
         }
 
@@ -47,6 +48,8 @@ namespace PuntajeClases.Models
                     .IsRequired()
                     .HasMaxLength(8)
                     .IsFixedLength();
+
+                entity.Property(e => e.FueGrabada).HasColumnName("FUE_GRABADA");
 
                 entity.HasOne(d => d.CategoriaNavigation)
                     .WithMany(p => p.Clases)
