@@ -14,7 +14,8 @@ namespace PuntajeClases
 {
     public class Program
     {
-        static int[] RANGO_ANIOS = { 2020,2030 };
+        private const int LONGITUD_ACEPTADA_FORMATO_FECHA = 8;
+        private static int[] RANGO_ANIOS = { 2020,2030 };
         static ClasesContext context = new ClasesContext();
         public static void Main(string[] args)
         {
@@ -161,56 +162,36 @@ namespace PuntajeClases
         private static string[] EsFormatoFecha(string respuesta)    
         {
             string[] retorno = {respuesta,null};
-            int TAMANIO_FORMATO = 8;
 
-            if (retorno[0].Length!=TAMANIO_FORMATO && !retorno[0].Equals("hoy", StringComparison.InvariantCultureIgnoreCase)
-                && !retorno[0].Equals("ayer", StringComparison.InvariantCultureIgnoreCase))
+            if (!EsHoy(retorno[0]) && !EsAyer(retorno[0]) && EsTamanioAceptado(retorno[0]))
             {
                 
-                if (retorno[0].Length == TAMANIO_FORMATO - 1)
+                if (EsTamanioAceptado(retorno[0],-1))
                 {
-                    if (retorno[0].ToCharArray()[4].Equals('/'))
+                    if (EstaFechaConUnDigitoEnDia(retorno[0]))
                     {
-                        if (retorno[0].ToCharArray()[1].Equals('/'))
-                        {
-                            retorno[0] = "0" + retorno[0];
-
-                            return EsFormatoFecha(retorno[0]);
-                        }
-                        else if (retorno[0].ToCharArray()[2].Equals('/'))
-                        {
-                            retorno[0] = "0" + retorno[0];
-                            char[] caracteres = retorno[0].ToCharArray();
-                            char centinela = caracteres[1];
-                            int i = 3;
-                            char aux;
-
-                            while (caracteres[0] != centinela)
-                            {
-                                aux = caracteres[i];
-                                caracteres[i] = caracteres[0];
-                                caracteres[0] = aux;
-                                i--;
-                            }
-
-                            retorno[0] = new string(caracteres);
-
-                            return EsFormatoFecha(retorno[0]);
-                        }
+                        return EsFormatoFecha("0" + retorno[0]);
                     }
+                    else if(EstaFechaConUnDigitoEnMes(retorno[0]))
+                    {
+                        retorno[0]=ArreglarFechaUnDigitoEnMes(retorno[0]);
+
+                        return EsFormatoFecha(retorno[0]);
+                    }
+
                 }
 
                 return retorno;
 
             }
 
-            if(retorno[0].Length == 4)
+            if(EsAyer(retorno[0]))
             {
                 retorno[1] = GenerarDiaDeAyerFormato();
 
                 return retorno;
             } 
-            else if (retorno[0].Length == 3)
+            else if (EsHoy(retorno[0]))
             {
                 retorno[1] = GenerarDiaDeHoyFormato();
 
@@ -219,15 +200,80 @@ namespace PuntajeClases
 
             Char[] respuestaArray=retorno[0].ToCharArray();
 
-            int cont = 0;
+            if (FechaEstaBienPuesta(respuestaArray))
+            {
+                if (EsFechaValida(respuestaArray))
+                    retorno[1] = retorno[0];
+            }
+       
+            return retorno;
 
-            while(cont<TAMANIO_FORMATO && retorno[0]!=null)
+        }
+        private static bool EsTamanioAceptado(string dia)
+        {
+            return dia.Length != LONGITUD_ACEPTADA_FORMATO_FECHA;
+        }
+        private static bool EsTamanioAceptado(string dia,int restarAtamanio)
+        {
+            return dia.Length != (LONGITUD_ACEPTADA_FORMATO_FECHA - restarAtamanio);
+        }
+        private static bool EstaFechaConUnDigitoEnDia(string dia)
+        {
+            bool ok = false;
+
+            if (dia.ToCharArray()[4].Equals('/'))
+            {
+                if (dia.ToCharArray()[1].Equals('/'))
+                {
+                    ok = true;
+                }
+            }
+
+            return ok;
+        }
+        private static bool EstaFechaConUnDigitoEnMes(string dia)
+        {
+            bool ok = false;
+
+            if (dia.ToCharArray()[4].Equals('/'))
+            {
+                if (dia.ToCharArray()[2].Equals('/'))
+                {
+                    ok = true;
+                }
+            }
+
+            return ok;
+        }
+        private static string ArreglarFechaUnDigitoEnMes(string dia)
+        {
+            dia = "0" + dia;
+            char[] caracteres =dia.ToCharArray();
+            char centinela = caracteres[1];
+            int i = 3;
+            char aux;
+
+            while (caracteres[0] != centinela)
+            {
+                aux = caracteres[i];
+                caracteres[i] = caracteres[0];
+                caracteres[0] = aux;
+                i--;
+            }
+
+            return new string(caracteres);
+        }
+        private static bool FechaEstaBienPuesta(char[] respuestaArray)
+        {
+            int cont = 0;
+            bool ok = true;
+            while (cont < LONGITUD_ACEPTADA_FORMATO_FECHA && ok)
             {
                 if (cont == 2 || cont == 5)
                 {
                     if (!respuestaArray[cont].Equals('/'))
                     {
-                        retorno[0] = null;
+                        ok = false;
                     }
 
                 }
@@ -236,7 +282,7 @@ namespace PuntajeClases
 
                     if (char.IsLetter(respuestaArray[cont]))
                     {
-                        retorno[0] = null;
+                        ok = false;
                     }
                 }
 
@@ -244,11 +290,15 @@ namespace PuntajeClases
 
             }
 
-            if (EsFechaValida(respuestaArray))
-                retorno[1] = retorno[0];
-
-            return retorno;
-
+            return ok;
+        }
+        private static bool EsAyer(string s)
+        {
+            return s.Equals("ayer", StringComparison.InvariantCultureIgnoreCase);
+        }
+        private static bool EsHoy(string s)
+        {
+            return s.Equals("hoy", StringComparison.InvariantCultureIgnoreCase);
         }
         private static string GenerarDiaDeHoyFormato()
         {
@@ -276,7 +326,7 @@ namespace PuntajeClases
             {
                 int mes = Int32.Parse((new string("" + fecha[3] + "" + fecha[4])));
 
-                if (mes > 0 && mes < 12)
+                if (mes > 0 && mes <= 12)
                 {
                     int dia = Int32.Parse((new string("" + fecha[0] + "" + fecha[1])));
 
