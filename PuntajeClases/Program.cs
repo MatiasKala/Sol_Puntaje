@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Office.Interop.Excel;
 using _excel = Microsoft.Office.Interop.Excel;
+using PuntajeClases.Unused;
 
 namespace PuntajeClases
 {
@@ -76,12 +77,11 @@ namespace PuntajeClases
             Clases c = new Clases();
 
             c.DiaClase = IngresarDia("Que dia es hoy?");
-            c.Categoria = IngresarCategoria("Que tuviste hoy?");
+            c.Categoria = IngresarCategoriaCargarClase("Que tuviste hoy?");
             c.Puntaje = IngresarPuntaje("Del 1 al 10, cuanto estuvo la clase?");
             c.FueGrabada = IngresoRespuesta(0,1,"Se grabo la clase? 0 para NO, 1 para SI")==0 ? false: true;
             c.Comentario = Ingresar("Algun comentario extra?");
             c.Id = GenerarId(c.DiaClase);
-
 
             //c.SetCategDescrip();
             // NO SE PUEDE SETEAR LA CATEGORIA PORQUE SE ROMPE 
@@ -100,6 +100,7 @@ namespace PuntajeClases
             }
 
         }
+
         private static int GenerarId(string diaClase)
         {
             int i=0;
@@ -145,6 +146,9 @@ namespace PuntajeClases
                 return puntaje;         
 
         }
+        //----------------------------------------------------------
+        // FUNCIONES DE INGRESO Y VALIDACION DE FECHA
+        //----------------------------------------------------------
         private static string IngresarDia(string v)
          {
             Console.WriteLine(v);
@@ -1443,6 +1447,42 @@ namespace PuntajeClases
             }
 
             return rta.ToUpper();
+        }
+        private static string IngresarCategoriaCargarClase(string v)
+        {
+            string retorno;
+
+            string categPorDia = ObtenerCategoriaPorDiaDeSemana();
+
+            if(IngresoRespuesta(0,1,"Tuviste hoy " + categPorDia + "?\n0.NO 1.SI")==1)
+            {
+                retorno = categPorDia;
+            }
+            else
+            {
+                retorno=IngresarCategoria(v);
+            }
+
+            return retorno;
+
+        }
+        private static string ObtenerCategoriaPorDiaDeSemana()
+        {
+            string retorno = null;
+
+            if (HoyEsDiaDeClases())
+            {
+                retorno=DiccionarioMateriaPorDia.CategoriaPorDia();
+            }
+
+            return retorno;
+
+        }
+        private static bool HoyEsDiaDeClases()
+        {
+            DayOfWeek hoy = DateTime.Today.DayOfWeek;
+            return hoy == DayOfWeek.Monday || hoy == DayOfWeek.Tuesday ||
+                   hoy == DayOfWeek.Wednesday || hoy == DayOfWeek.Thursday;
         }
         private static void OpcionSecreta()
         {

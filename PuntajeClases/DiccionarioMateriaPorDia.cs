@@ -2,25 +2,41 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PuntajeClases.Unused
+namespace PuntajeClases
 {
     class DiccionarioMateriaPorDia
     {
-        public string CategoriaPorDia()
+        public static string CategoriaPorDia()
         {
-            string retorno=null;
+            string retorno = null;
 
             DayOfWeek dia = DateTime.Today.DayOfWeek;
             if (dia.Equals(DayOfWeek.Monday))
             {
                 retorno = CasoLunes();
             }
-            Dictionary<DayOfWeek, string> dic = new Dictionary<DayOfWeek, string> ();
-          
-            return retorno;
-        }
+            else
+            {
+                Dictionary<DayOfWeek, string> dic = InicializarDiccionario();
 
-        private string CasoLunes()
+                retorno= dic[dia];
+
+            }
+
+            return retorno;
+        
+        }
+        private static Dictionary<DayOfWeek, string> InicializarDiccionario()
+        {
+            Dictionary<DayOfWeek, string> dic = new Dictionary<DayOfWeek, string>();
+
+            dic.Add(DayOfWeek.Tuesday, "PR2");
+            dic.Add(DayOfWeek.Wednesday, "TP2");
+            dic.Add(DayOfWeek.Thursday, "NT2");
+
+            return dic;
+        }
+        private static string CasoLunes()
         {
             string retorno = null;
 
