@@ -65,7 +65,6 @@ namespace PuntajeClases
             Console.WriteLine("Toca lo que sea para salir :)");
             Console.ReadLine();
         }
-
         //----------------------------------------------------------
         // EMPIEZAN LAS FUNCIONES PARA CARGAR UNA CLASE
         //----------------------------------------------------------
@@ -100,7 +99,6 @@ namespace PuntajeClases
             }
 
         }
-
         private static int GenerarId(string diaClase)
         {
             int i=0;
