@@ -1501,7 +1501,29 @@ namespace PuntajeClases
 
             i = i - 1;
 
-            Console.WriteLine("Cantidad de clases cargadas: " + i);
+            Console.WriteLine("Clases cargadas por Materias\n");
+
+            Materias[] m = context.Materias.ToArray();
+            Dictionary<string, int> cantidadClasesMaterias = new Dictionary<string, int>();
+
+
+            foreach (var mat in m)
+            {
+                if (mat.Clases.Count == 0)
+                    continue;
+                cantidadClasesMaterias.Add(mat.Descripcion, mat.Clases.Count);
+            }
+
+            var newArray = cantidadClasesMaterias.Keys.OrderBy(x => x.ToLower()).ToArray();
+
+            foreach (var item in newArray)
+            {
+                Console.WriteLine(item + ":" + cantidadClasesMaterias[item]);
+            }
+
+
+            Console.WriteLine("\nCantidad de clases cargadas: " + i);
+
         }
         private static void OpcionSecreta2()
         {
