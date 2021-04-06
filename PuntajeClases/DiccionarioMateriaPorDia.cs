@@ -22,6 +22,13 @@ namespace PuntajeClases
             dic.Add(DayOfWeek.Thursday, CasoJueves());
 
             return dic;
+        
+            /*
+             SE PODRIAN MEJORAR LAS SUGERENCIAS HACIENDO QUE EL DIA QUE TOME NO ESTE HARCODEADO ACA
+            SINO QUE VENGA DEL DIA QUE SE INGRESO ANTERIORMENTE EN LA CLASE. PARA ESO TENDRIA QUE PODER
+            TRANSFORMAR EL STRING dd/MM/yy EN UN DATETIME Y PODER UTILIZARLO PARA VER QUE WEEKDAY ES.
+             */
+
         }
         private static string CasoLunes()
         {
