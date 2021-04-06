@@ -158,6 +158,8 @@ namespace PuntajeClases
                 respuesta = EsFormatoFecha(Console.ReadLine());
             }
 
+            Console.WriteLine(respuesta[1]); 
+
             return respuesta[1];
 
         }
@@ -165,7 +167,7 @@ namespace PuntajeClases
         {
             string[] retorno = {respuesta,null};
 
-            if (!EsHoy(retorno[0]) && !EsAyer(retorno[0]) && EsTamanioAceptado(retorno[0]))
+            if (!EsHoy(retorno[0]) && !EsAyer(retorno[0]) && !EsManana(retorno[0]) && EsTamanioAceptado(retorno[0]))
             {
                 
                 if (EsTamanioAceptado(retorno[0],-1))
@@ -196,6 +198,12 @@ namespace PuntajeClases
             else if (EsHoy(retorno[0]))
             {
                 retorno[1] = GenerarDiaDeHoyFormato();
+
+                return retorno;
+            } 
+            else if (EsManana(retorno[0]))
+            {
+                retorno[1] = GenerarDiaMananaFormato();
 
                 return retorno;
             }
@@ -302,6 +310,10 @@ namespace PuntajeClases
         {
             return s.Equals("hoy", StringComparison.InvariantCultureIgnoreCase);
         }
+        private static bool EsManana(string s)
+        {
+            return s.Equals("mañana", StringComparison.InvariantCultureIgnoreCase);
+        }
         private static string GenerarDiaDeHoyFormato()
         {
             DateTime hoy = DateTime.Now;
@@ -315,6 +327,14 @@ namespace PuntajeClases
             DateTime ayer = DateTime.Today.AddDays(-1);
 
             string miVariable = ayer.ToString("dd/MM/yy");
+
+            return miVariable;
+        }
+        private static string GenerarDiaMananaFormato()
+        {
+            DateTime manana = DateTime.Today.AddDays(1);
+
+            string miVariable = manana.ToString("dd/MM/yy");
 
             return miVariable;
         }
