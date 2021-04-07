@@ -1586,7 +1586,7 @@ namespace PuntajeClases
         }
         private static void EditarClase(Clases clase)
         {
-            int eleccion = IngresoRespuesta(0, 4, "Que modificamos de la clase " + clase.Categoria+" "+clase.DiaClase + "?\n" +
+            int eleccion = IngresoRespuesta(0, 5, "Que modificamos de la clase " + clase.Categoria+" "+clase.DiaClase + "?\n" +
                 "0.Salir\n" +
                 "1.Dia de la clase\n" +
                 "2.Materia\n" +
@@ -1614,7 +1614,7 @@ namespace PuntajeClases
                         clase.Comentario = Ingresar("Modifique el comentario");
                         break;
                 }
-                eleccion = IngresoRespuesta(0, 4, "Desea cambiar algo mas?\n" +
+                eleccion = IngresoRespuesta(0, 5, "Desea cambiar algo mas?\n" +
                 "0.Salir\n" +
                 "1.Dia de la clase\n" +
                 "2.Materia\n" +
