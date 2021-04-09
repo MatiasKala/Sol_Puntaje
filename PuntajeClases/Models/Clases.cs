@@ -21,7 +21,7 @@ namespace PuntajeClases.Models
         {
             setCategoriaNavigation();
             return "Materia :" + CategoriaNavigation.Descripcion + "\nDia clase :" + DiaClase + "\nPuntaje :" + Puntaje 
-                +"\nFue Grabada? :" + FueGrabada + "\nComentario  :" + Comentario;
+                +"\nFue Grabada? " + ((FueGrabada==true)? "Si" : "No") + "\nComentario  :" + Comentario;
 
         }
         public void setCategoriaNavigation()
