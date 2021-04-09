@@ -270,7 +270,7 @@ namespace PuntajeClases
             foreach (Materias m in todasLasMaterias)
             {
                 double prom = ObtenerPromedio(ObtenerClasesPorCateg(m.Categoria));
-                if (m.Clases.Count == 0)
+                if (m.Clases.Count <= 1)
                 {
                     materiasSinCargar.Add(m);
                 }
@@ -283,7 +283,7 @@ namespace PuntajeClases
 
             double[] promValores =promedios.Keys.ToArray();
             
-            OrdenarPromedios(promValores);
+            OrdenarPromediosInsercion(promValores);
 
             Console.WriteLine("Mostrando promedios por materia de mayor a menor\n\n");
 
@@ -294,7 +294,7 @@ namespace PuntajeClases
                 Console.WriteLine("El promedio de la materia " + value + "es de "+promValores[i]+"\n");
             }
 
-            Console.WriteLine("Estas materias todavia no comenzaron o no tienen ninguna clase cargada\n\n");
+            Console.WriteLine("Estas materias tienen una o ninguna clase cargada \n\n");
 
             foreach (Materias m in materiasSinCargar)
             {
@@ -302,23 +302,51 @@ namespace PuntajeClases
             }
 
         }
-        private static void OrdenarPromedios(double[] promValores)
+    
+        //private static void OrdenarPromediosBurbuja(double[] promValores)
+        //{
+
+        //    double aux;
+
+        //    for (int i = 0; i < promValores.Length-1; i++)
+        //    {
+        //        for (int j = 0; j < promValores.Length-1; j++)
+        //        {
+        //            if (promValores[j] > promValores[j + 1])
+        //            {
+        //                aux=promValores[j];
+        //                promValores[j] = promValores[j + 1];
+        //                promValores[j + 1] = aux;
+        //            }
+        //        }
+        //    }
+
+        //}
+        private static void OrdenarPromediosInsercion(double[] promValores)
         {
+            int tamanio = promValores.Length;
 
-            double aux;
-
-            for (int i = 0; i < promValores.Length-1; i++)
+            // Solo va a dar una vuelta
+            for (int i = 1; i < tamanio; ++i)
             {
-                for (int j = 0; j < promValores.Length-1; j++)
+                // Agarra un numero clave para iterar
+                double key = promValores[i];
+                int j = i - 1;
+
+                // Ahora itera desde el numero clave para atras hasta que llegue al principio o el mismo sea mayor al apuntado 
+                // Va reemplazando los numeros que son menores por el numero clave
+
+                while (j >= 0 && promValores[j] > key)
                 {
-                    if (promValores[j] > promValores[j + 1])
-                    {
-                        aux=promValores[j];
-                        promValores[j] = promValores[j + 1];
-                        promValores[j + 1] = aux;
-                    }
+                    promValores[j + 1] = promValores[j];
+                    j = j - 1;
                 }
+
+                //Finalmente ubica el numero clave cuando llegua al principio o se encuentra un numero menor
+                promValores[j + 1] = key;
             }
+
+            // Explicacion con imagenes: https://www.geeksforgeeks.org/insertion-sort/
 
         }
         private static void MostrarPromedioClaseMateria(string categ)
@@ -772,7 +800,7 @@ namespace PuntajeClases
 
             LinkedList<Materias> aux = new LinkedList<Materias>();
 
-            OrdenarProfesores(materias);
+            OrdenarProfesoresShell(materias);
 
             for(int i = 0; i < materias.Length; i++)
             {
@@ -813,21 +841,23 @@ namespace PuntajeClases
             return materiasRepe;
 
         }
-        private static void OrdenarProfesores(Materias[] materias)
+        private static void OrdenarProfesoresShell(Materias[] array)
         {
+            int length = array.Length;
 
-            Materias aux;
-
-            for (int i = 0; i < materias.Length - 1; i++)
+            for (int h = length / 2; h > 0; h /= 2)
             {
-                for (int j = 0; j < materias.Length - 1; j++)
+                for (int i = h; i < length; i += 1)
                 {
-                    if (materias[i].Profesor!=null & materias[j].Profesor!=null && materias[j].Profesor.CompareTo(materias[j + 1].Profesor) > 0)
+                    Materias temp = array[i];
+
+                    int j;
+                    for (j = i; j >= h && array[j - h].Profesor.CompareTo(temp.Profesor) > 0; j -= h)
                     {
-                        aux = materias[j];
-                        materias[j] = materias[j + 1];
-                        materias[j + 1] = aux;
+                        array[j] = array[j - h];
                     }
+
+                    array[j] = temp;
                 }
             }
 
@@ -844,7 +874,7 @@ namespace PuntajeClases
             {
                 for (int j = 0; j < cantidad; j++)
                 {
-                    if (EsFechaMayor(clases[j], clases[j + 1]))
+                    if (Fecha.EsFechaMayor(clases[j], clases[j + 1]))
                     {
                         aux = clases[j];
                         clases[j] = clases[j + 1];
@@ -854,56 +884,6 @@ namespace PuntajeClases
             }
 
             return clases;
-        }
-        private static bool EsFechaMayor(Clases clases1, Clases clases2)
-        {
-            bool ok = false;
-
-            char[] fecha1 = clases1.DiaClase.ToCharArray();
-            char[] fecha2 = clases2.DiaClase.ToCharArray();
-
-            int anio1 = ConseguirNumeroPorArray(fecha1,6,7);
-            int anio2 = ConseguirNumeroPorArray(fecha2,6,7);
-
-
-            if (anio1 > anio2)
-            {
-                ok = true;
-
-            } 
-            else if (anio1 == anio2)
-            {
-                int mes1 = ConseguirNumeroPorArray(fecha1, 3, 4);
-                int mes2 = ConseguirNumeroPorArray(fecha2, 3, 4);
-
-                if (mes1 > mes2)
-                {
-                    ok = true;
-
-                }
-                else if (mes1 == mes2)
-                {
-                    int dia1 = ConseguirNumeroPorArray(fecha1, 0, 1);
-                    int dia2 = ConseguirNumeroPorArray(fecha2, 0, 1);
-
-                    if (dia1 > dia2)
-                    {
-                        ok = true;
-
-                    }
-
-                }
-
-            }
-
-            return ok;
-        }
-        private static int ConseguirNumeroPorArray(char[] fecha, int posicion1, int posicion2)
-        {
-            int decena = int.Parse(fecha[posicion1].ToString()) * 10;
-            int unidad = int.Parse(fecha[posicion2].ToString());
-
-            return decena + unidad;
         }
 
         //----------------------------------------------------------

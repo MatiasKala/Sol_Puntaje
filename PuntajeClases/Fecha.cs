@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using PuntajeClases.Models;
 
 namespace PuntajeClases
 {
@@ -243,6 +244,56 @@ namespace PuntajeClases
 
             return num;
 
+        }
+        public static bool EsFechaMayor(Clases clases1, Clases clases2)
+        {
+            bool ok = false;
+
+            char[] fecha1 = clases1.DiaClase.ToCharArray();
+            char[] fecha2 = clases2.DiaClase.ToCharArray();
+
+            int anio1 = ConseguirNumeroPorArray(fecha1, 6, 7);
+            int anio2 = ConseguirNumeroPorArray(fecha2, 6, 7);
+
+
+            if (anio1 > anio2)
+            {
+                ok = true;
+
+            }
+            else if (anio1 == anio2)
+            {
+                int mes1 = ConseguirNumeroPorArray(fecha1, 3, 4);
+                int mes2 = ConseguirNumeroPorArray(fecha2, 3, 4);
+
+                if (mes1 > mes2)
+                {
+                    ok = true;
+
+                }
+                else if (mes1 == mes2)
+                {
+                    int dia1 = ConseguirNumeroPorArray(fecha1, 0, 1);
+                    int dia2 = ConseguirNumeroPorArray(fecha2, 0, 1);
+
+                    if (dia1 > dia2)
+                    {
+                        ok = true;
+
+                    }
+
+                }
+
+            }
+
+            return ok;
+        }
+        private static int ConseguirNumeroPorArray(char[] fecha, int posicion1, int posicion2)
+        {
+            int decena = int.Parse(fecha[posicion1].ToString()) * 10;
+            int unidad = int.Parse(fecha[posicion2].ToString());
+
+            return decena + unidad;
         }
 
     }
