@@ -862,29 +862,41 @@ namespace PuntajeClases
             }
 
         }
-        private static Clases[] ObtenerClasesOrdenadas()
+        private static Clases[] ObtenerClasesOrdenadasShell()
         {
             int cantidad = context.Clases.Count()-1;
 
             Clases[] clases = context.Clases.ToArray();
 
-            Clases aux;
+            int length = clases.Length;
 
-            for (int i = 0; i < cantidad; i++)
+            for (int h = length / 2; h > 0; h /= 2)
             {
-                for (int j = 0; j < cantidad; j++)
+                for (int i = h; i < length; i += 1)
                 {
-                    if (Fecha.EsFechaMayor(clases[j], clases[j + 1]))
+                    Clases temp = clases[i];
+
+                    int j;
+                    for (j = i; j >= h && Fecha.EsFechaMayor(clases[j - h],temp); j -= h)
                     {
-                        aux = clases[j];
-                        clases[j] = clases[j + 1];
-                        clases[j + 1] = aux;
+                        clases[j] =clases[j - h];
                     }
+
+                    clases[j] = temp;
                 }
             }
 
+
             return clases;
         }
+
+        // ||||||||||||||||||||||||||||||||||||||
+        // ||||||||||||||||||||||||||||||||||||||
+        // ||||||||||||||||||||||||||||||||||||||
+        // CAMBIAR METODO ORDENAMEINTO DE CLASES
+        // ||||||||||||||||||||||||||||||||||||||
+        // ||||||||||||||||||||||||||||||||||||||
+        // ||||||||||||||||||||||||||||||||||||||
 
         //----------------------------------------------------------
         // EMPIEZAN LAS FUNCIONES PARA MODIFICAR MATERIAS  
@@ -1215,7 +1227,7 @@ namespace PuntajeClases
 
             string categPorDia = ObtenerCategoriaPorDiaDeSemana();
 
-            if(IngresoRespuesta(0,1,"Tuviste hoy " + categPorDia + "?\n0.NO 1.SI")==1)
+            if(categPorDia!=null && IngresoRespuesta(0,1,"Tuviste hoy " + categPorDia + "?\n0.NO 1.SI")==1)
             {
                 retorno = categPorDia;
             }
@@ -1231,7 +1243,7 @@ namespace PuntajeClases
         {
             string retorno = null;
 
-            if (HoyEsDiaDeClases())
+            if (Fecha.HoyEsDiaDeClases())
             {
                 retorno=DiccionarioMateriaPorDia.CategoriaPorDia();
             }
@@ -1239,17 +1251,11 @@ namespace PuntajeClases
             return retorno;
 
         }
-        private static bool HoyEsDiaDeClases()
-        {
-            DayOfWeek hoy = DateTime.Today.DayOfWeek;
-            return hoy == DayOfWeek.Monday || hoy == DayOfWeek.Tuesday ||
-                   hoy == DayOfWeek.Wednesday || hoy == DayOfWeek.Thursday;
-        }
         private static void OpcionSecreta()
         {
             Console.WriteLine("Ah jajajja la opcion secreta? Toca lo que sea");
             Console.ReadLine();
-            Clases[] todasLasClases = ObtenerClasesOrdenadas();
+            Clases[] todasLasClases = ObtenerClasesOrdenadasShell();
 
             int i = 1;
 
@@ -1432,7 +1438,7 @@ namespace PuntajeClases
         {
             CrearTitulosBackUpClases(worksheet1);
 
-            Clases[] todasLasClases = ObtenerClasesOrdenadas();
+            Clases[] todasLasClases = ObtenerClasesOrdenadasShell();
 
             int cantidadClases = todasLasClases.Length;
             int contClases = 0;

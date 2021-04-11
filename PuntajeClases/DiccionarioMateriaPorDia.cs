@@ -8,8 +8,9 @@ namespace PuntajeClases
     {
         public static string CategoriaPorDia()
         {
+            string categ = InicializarDiccionario()[DateTime.Today.DayOfWeek];
 
-            return InicializarDiccionario()[DateTime.Today.DayOfWeek];  
+            return categ.Equals("")? null: categ;  
             
         }
         private static Dictionary<DayOfWeek, string> InicializarDiccionario()

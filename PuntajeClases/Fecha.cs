@@ -295,6 +295,12 @@ namespace PuntajeClases
 
             return decena + unidad;
         }
+        public static bool HoyEsDiaDeClases()
+        {
+            DayOfWeek hoy = DateTime.Today.DayOfWeek;
+            return hoy == DayOfWeek.Monday || hoy == DayOfWeek.Tuesday ||
+                   hoy == DayOfWeek.Wednesday || hoy == DayOfWeek.Thursday;
+        }
 
     }
 }
