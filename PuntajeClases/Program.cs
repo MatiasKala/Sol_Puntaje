@@ -1311,7 +1311,7 @@ namespace PuntajeClases
 
                 if (clase != null)
                 {
-                    if (IngresoRespuesta(1, 2, "Que queres hacer con esta clase? Borrar o Editar?. Ingresa 1 para borrar 2 para editar") == 1)
+                    if (IngresoRespuesta(1, 2, "Que queres hacer con esta clase? "+clase.Categoria+" del "+clase.DiaClase+". Borrar o Editar?. Ingresa 1 para borrar 2 para editar") == 1)
                     {
                         
                         BorrarClase(clase);
