@@ -249,6 +249,7 @@ namespace PuntajeClases
                     case 100:
                         OpcionSecreta2();
                         break;
+
                 }
             }
             catch(Exception e)
@@ -812,7 +813,7 @@ namespace PuntajeClases
                     {
                         if (m.Profesor != null)
                         {
-                            Console.WriteLine("Profesor: " + m.Profesor + " Materia: " + m.Descripcion);
+                            Console.WriteLine("Profesor: " + m.Profesor.PadRight(25) + " Materia: " + m.Descripcion);
                         }
                     }
 
