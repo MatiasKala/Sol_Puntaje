@@ -55,6 +55,7 @@ namespace PuntajeClases
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                     Console.WriteLine(e.GetType());
                     Console.WriteLine("NO VES QUE ROMPISTE ALGO, QUE HICISTE AHORA?");
                 }
@@ -74,8 +75,8 @@ namespace PuntajeClases
 
             Clases c = new Clases();
 
-            c.DiaClase = Fecha.IngresarDia("Que dia es hoy?");
-            c.Categoria = IngresarCategoriaCargarClase("Que tuviste hoy?");
+            c.DiaClase = Fecha.IngresarDia("Que dia fue la clase ?");
+            c.Categoria = IngresarCategoriaCargarClase("Que tuviste ?",c.DiaClase);
             c.Puntaje = IngresarPuntaje("Del 1 al 10, cuanto estuvo la clase?");
             c.FueGrabada = IngresoRespuesta(0,1,"Se grabo la clase? 0 para NO, 1 para SI")==0 ? false: true;
             c.Comentario = Ingresar("Algun comentario extra?");
@@ -1222,13 +1223,13 @@ namespace PuntajeClases
 
             return rta.ToUpper();
         }
-        private static string IngresarCategoriaCargarClase(string v)
+        private static string IngresarCategoriaCargarClase(string v,string ddMMyy)
         {
             string retorno;
 
-            string categPorDia = ObtenerCategoriaPorDiaDeSemana();
+            string categPorDia = ObtenerCategoriaPorDiaDeSemana(ddMMyy);
 
-            if(categPorDia!=null && IngresoRespuesta(0,1,"Tuviste hoy " + categPorDia + "?\n0.NO 1.SI")==1)
+            if(categPorDia!=null && IngresoRespuesta(0,1,"Tuviste " + categPorDia + "?\n0.NO 1.SI")==1)
             {
                 retorno = categPorDia;
             }
@@ -1240,17 +1241,9 @@ namespace PuntajeClases
             return retorno;
 
         }
-        private static string ObtenerCategoriaPorDiaDeSemana()
+        private static string ObtenerCategoriaPorDiaDeSemana(string day)
         {
-            string retorno = null;
-
-            if (Fecha.HoyEsDiaDeClases())
-            {
-                retorno=DiccionarioMateriaPorDia.CategoriaPorDia();
-            }
-
-            return retorno;
-
+            return DiccionarioMateriaPorDia.CategoriaPorDia(day);
         }
         private static void OpcionSecreta()
         {
