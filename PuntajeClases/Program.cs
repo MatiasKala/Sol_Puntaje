@@ -303,7 +303,7 @@ namespace PuntajeClases
             }
 
         }
-    
+  
         //private static void OrdenarPromediosBurbuja(double[] promValores)
         //{
 
@@ -1349,19 +1349,34 @@ namespace PuntajeClases
                 switch (eleccion)
                 {
                     case 1:
+                        Console.WriteLine("Actual\n" + clase.DiaClase);
                         clase.DiaClase = Fecha.IngresarDia("Ingrese el nuevo dia de la clase");
                         break;
                     case 2:
+                        Console.WriteLine("Actual\n" + clase.Categoria);
                         clase.Categoria = IngresarCategoria("Ingrese la abreviatura de la materia (Ej:TP1)");
                         break;
                     case 3:
+                        Console.WriteLine("Actual\n" + clase.Puntaje);
                         clase.Puntaje = IngresarPuntaje("Ingresa el nuevo puntaje de la clase (1 al 10)");
                         break;
                     case 4:
+                        Console.WriteLine("Actual\n" + clase.FueGrabada);
                         clase.FueGrabada = IngresoRespuesta(0, 1, "Se grabo la clase? 0 para NO, 1 para SI") == 0 ? false : true;
-                        break; 
+                        break;
                     case 5:
-                        clase.Comentario = Ingresar("Modifique el comentario");
+                        Console.WriteLine("Actual\n" + clase.Comentario);
+                        if (IngresoRespuesta(0, 1, "Desea añadir algo a lo escrito anteriormente o rehacer?\n0 AÑADIR\n1 REHACER") == 0)
+                        {
+                            string comment = clase.Comentario.Trim();
+                            comment+= " " + Ingresar("Extienda el comentario");
+                            clase.Comentario = comment;
+                        }
+                        else
+                        {
+                            clase.Comentario = Ingresar("Modifique el comentario");
+                        }
+                        Console.WriteLine("Nuevo Comentario\n" + clase.Comentario);
                         break;
                 }
                 eleccion = IngresoRespuesta(0, 5, "Desea cambiar algo mas?\n" +
