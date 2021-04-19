@@ -267,18 +267,23 @@ namespace PuntajeClases
 
         private static void MostrarClases(List<Clases> clases)
         {
+            var contador = 1;
+
             foreach (Clases c in clases)
             {
-                Console.WriteLine(c.Mostrar()+"\n");
+                Console.WriteLine(contador + ".    " + c.Mostrar() + "\n\n");
+                contador++;
             }
         }
         private static void MostrarClases(List<Clases> clases, string v)
         {
+            var contador = 1;
             Console.WriteLine(v + "\n");
 
             foreach (Clases c in clases)
             {
-                Console.WriteLine(c.Mostrar()+"\n\n");
+                Console.WriteLine(contador + ".    "+c.Mostrar()+"\n\n");
+                contador++;
             }
         }   
         private static void MostrarTodosLosPromedios()
