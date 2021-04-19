@@ -178,9 +178,10 @@ namespace PuntajeClases
             Console.WriteLine("12. Mostrar informacion de materias");
             Console.WriteLine("13. Mostrar materias por cuatrimestre");
             Console.WriteLine("14. Mostrar profesores");
+            Console.WriteLine("15. Mostrar clases por materia");
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("\n");
-            int rta = IngresoRespuesta(1, 14,99,100);
+            int rta = IngresoRespuesta(1, 15,99,100);
             int mes;
             int cuatri;
 
@@ -244,6 +245,9 @@ namespace PuntajeClases
                     case 14:
                         MostrarProfesores();
                         break;
+                    case 15:
+                        MostrarClases(ObtenerClasesOrdenadasShell(ObtenerClasesPorCateg(IngresarCategoria("De que categoria vemos las clases?"))));
+                        break;
                     case 99:
                         OpcionSecreta();
                         break;
@@ -260,6 +264,23 @@ namespace PuntajeClases
             }
          
         }
+
+        private static void MostrarClases(List<Clases> clases)
+        {
+            foreach (Clases c in clases)
+            {
+                Console.WriteLine(c.Mostrar()+"\n");
+            }
+        }
+        private static void MostrarClases(List<Clases> clases, string v)
+        {
+            Console.WriteLine(v + "\n");
+
+            foreach (Clases c in clases)
+            {
+                Console.WriteLine(c.Mostrar()+"\n\n");
+            }
+        }   
         private static void MostrarTodosLosPromedios()
         {
 
@@ -449,12 +470,9 @@ namespace PuntajeClases
 
                 List<Clases> mejorClaseDeCateg = ObtenerMejorClase(clasesDeCateg);
 
-                Console.WriteLine("\n La mejor clase de la materia " + categ + " es:\n");
+                Console.WriteLine();
 
-                foreach (Clases c in mejorClaseDeCateg)
-                {
-                    Console.WriteLine(c.Mostrar());
-                }
+                MostrarClases(mejorClaseDeCateg, "\n La mejor clase de la materia " + categ + " es:\n");
 
             }
             else
@@ -586,14 +604,9 @@ namespace PuntajeClases
 
                 List<Clases> mejorClase = ObtenerMejorClase(clasesDeMes);
 
-                Console.WriteLine("\nMostrando la/s clase/s con mejor puntaje del mes numero " + month + "\n");
+                Console.WriteLine();
 
-                foreach (Clases c in mejorClase)
-                {
-
-                    Console.WriteLine(c.Mostrar() + "\n");
-
-                }
+                MostrarClases(mejorClase,"\nMostrando la/s clase/s con mejor puntaje del mes numero " + month + "\n");
 
             }
             else
@@ -624,16 +637,9 @@ namespace PuntajeClases
             if (clasesDelAño.Count != 0)
             {
 
-                Console.WriteLine("\nMostrando la/s clase/s con mejor puntaje del año " + year + "\n");
-
                 List<Clases> mejorClase = ObtenerMejorClase(clasesDelAño);
 
-                foreach (Clases c in mejorClase)
-                {
-
-                    Console.WriteLine(c.Mostrar() + "\n");
-
-                }
+                MostrarClases(mejorClase, "\nMostrando la/s clase/s con mejor puntaje del año " + year + "\n");
 
             }
             else
@@ -651,12 +657,7 @@ namespace PuntajeClases
             {
                 List<Clases> mejorClase = ObtenerMejorClase(clases);
 
-                Console.WriteLine("Esta/s son la/s clases con mejor puntuacion:\n");
-
-                foreach (Clases c in mejorClase)
-                {
-                    Console.WriteLine(c.Mostrar() + "\n");
-                }
+                MostrarClases(mejorClase, "Esta/s son la/s clases con mejor puntuacion:\n");
             }
 
         }
@@ -684,12 +685,7 @@ namespace PuntajeClases
             if (clasesDelMes.Count != 0)
             {
 
-                Console.WriteLine("\nMostrando clases del mes numero " + month + "\n");
-
-                foreach (Clases c in clasesDelMes)
-                {
-                    Console.WriteLine(c.Mostrar() + "\n");
-                }
+                MostrarClases(clasesDelMes, "\nMostrando clases del mes numero " + month + "\n");
 
             }
             else
@@ -891,7 +887,31 @@ namespace PuntajeClases
 
             return clases;
         }
+        private static List<Clases> ObtenerClasesOrdenadasShell(List<Clases> clases)
+        {
 
+            int length = clases.Count;
+
+            for (int h = length / 2; h > 0; h /= 2)
+            {
+                for (int i = h; i < length; i += 1)
+                {
+                    Clases temp = clases[i];
+
+                    int j;
+                    for (j = i; j >= h && Fecha.EsFechaMayor(clases[j - h], temp); j -= h)
+                    {
+                        clases[j] = clases[j - h];
+                    }
+
+                    clases[j] = temp;
+                }
+            }
+
+
+            return clases;
+        }
+      
         // ||||||||||||||||||||||||||||||||||||||
         // ||||||||||||||||||||||||||||||||||||||
         // ||||||||||||||||||||||||||||||||||||||
