@@ -14,9 +14,7 @@ namespace PuntajeClases.Models
         public string Comentario { get; set; }
         public int Id { get; set; }
         public bool? FueGrabada { get; set; }
-
         public virtual Materias CategoriaNavigation { get; set; }
-
         public string Mostrar()
         {
             setCategoriaNavigation();
