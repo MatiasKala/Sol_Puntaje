@@ -264,7 +264,6 @@ namespace PuntajeClases
             }
          
         }
-
         private static void MostrarClases(List<Clases> clases)
         {
             var contador = 1;
@@ -293,18 +292,21 @@ namespace PuntajeClases
 
             List<Materias> materiasSinCargar = new List<Materias>();
 
-            Dictionary<double, string> promedios = new Dictionary<double, string>();
+            Dictionary<double, List<string>> promedios = new Dictionary<double, List<string>>();
 
             foreach (Materias m in todasLasMaterias)
             {
                 double prom = ObtenerPromedio(ObtenerClasesPorCateg(m.Categoria));
+
                 if (m.Clases.Count <= 1)
                 {
                     materiasSinCargar.Add(m);
                 }
                 else
                 {
-                    promedios.Add(prom, m.Descripcion);
+                    promedios.TryAdd(prom, new List<string>());
+                    promedios[prom].Add(m.Descripcion);
+
                 }
 
             }
@@ -317,9 +319,15 @@ namespace PuntajeClases
 
             for (int i = promValores.Length-1; i >0 - 1; i--)
             {
-                string value;
+                List<string> value;
+                
                 promedios.TryGetValue(promValores[i], out value);
-                Console.WriteLine("El promedio de la materia " + value + "es de "+promValores[i]+"\n");
+
+                if (HayUnoSolo(value))
+                    Console.WriteLine("El promedio de la materia " + value[0] + " es de " + promValores[i] + "\n");
+                else
+                    Console.WriteLine("El promedio de la materia " + ObtenerNombresConcatenados(value) + " es de " + promValores[i] + "\n");
+                ;
             }
 
             Console.WriteLine("Estas materias tienen una o ninguna clase cargada \n\n");
@@ -330,7 +338,20 @@ namespace PuntajeClases
             }
 
         }
-  
+        private static bool HayUnoSolo(List<string> value)
+        {
+            return value.Count == 1;
+        }
+        private static string ObtenerNombresConcatenados(List<string> value)
+        {
+            string retorno = value[0].Trim();
+            for (int i=1;i<value.Count;i++)        
+            {
+                retorno += " ," + value[i].Trim();
+            }
+            return retorno;
+        }
+
         //private static void OrdenarPromediosBurbuja(double[] promValores)
         //{
 

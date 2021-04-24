@@ -23,7 +23,8 @@ namespace PuntajeClases
         Idea 3 
         Podriamos cambiar el diccionario de promedios y en vez de hacerlo double-string hacerlo
         double-List<string> para evitar los problemas con los valores repetidos
-        EN CURSO :s
+
+        HECHO :p
 
         */
     }
