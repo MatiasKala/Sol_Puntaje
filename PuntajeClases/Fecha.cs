@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using PuntajeClases.Models;
 
@@ -288,6 +289,50 @@ namespace PuntajeClases
 
             return ok;
         }
+        public static bool EsBackUpMayorFecha(FileInfo file1, FileInfo file2)
+        {
+            bool ok = false;
+
+            char[] fecha1 = file1.Name.Substring(8).ToCharArray();
+            char[] fecha2 = file2.Name.Substring(8).ToCharArray(); ;
+
+            int anio1 = ConseguirNumeroPorArray(fecha1, 8, 9);
+            int anio2 = ConseguirNumeroPorArray(fecha2, 8, 9);
+
+
+            if (anio1 > anio2)
+            {
+                ok = true;
+
+            }
+            else if (anio1 == anio2)
+            {
+                int mes1 = ConseguirNumeroPorArray(fecha1, 3, 4);
+                int mes2 = ConseguirNumeroPorArray(fecha2, 3, 4);
+
+                if (mes1 > mes2)
+                {
+                    ok = true;
+
+                }
+                else if (mes1 == mes2)
+                {
+                    int dia1 = ConseguirNumeroPorArray(fecha1, 0, 1);
+                    int dia2 = ConseguirNumeroPorArray(fecha2, 0, 1);
+
+                    if (dia1 > dia2)
+                    {
+                        ok = true;
+
+                    }
+
+                }
+
+            }
+
+            return ok;
+        }
+
         private static int ConseguirNumeroPorArray(char[] fecha, int posicion1, int posicion2)
         {
             int decena = int.Parse(fecha[posicion1].ToString()) * 10;

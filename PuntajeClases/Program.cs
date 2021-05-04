@@ -10,6 +10,7 @@ using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Office.Interop.Excel;
 using _excel = Microsoft.Office.Interop.Excel;
 using PuntajeClases.Unused;
+using System.IO;
 
 namespace PuntajeClases
 {
@@ -31,7 +32,7 @@ namespace PuntajeClases
                     Console.WriteLine("1. Consultar datos");
                     Console.WriteLine("2. Cargar Nueva Clase");
                     Console.WriteLine("3. Cargar Informacion de Materias");
-                    Console.WriteLine("4. Generar BackUp de datos");
+                    Console.WriteLine("4. Administrar BackUps de datos");
                     Console.WriteLine("5. Fin del programa");
 
                     ingresoRespuesta = IngresoRespuesta(1, 5);
@@ -48,7 +49,7 @@ namespace PuntajeClases
                             ModificarMaterias();
                             break;
                         case 4:
-                            CrearBackUp();
+                            AdministrarBackUps();
                             break;
                     }
 
@@ -65,6 +66,7 @@ namespace PuntajeClases
             Console.WriteLine("Toca lo que sea para salir :)");
             Console.ReadLine();
         }
+
         //----------------------------------------------------------
         // EMPIEZAN LAS FUNCIONES PARA CARGAR UNA CLASE
         //----------------------------------------------------------
@@ -1458,6 +1460,27 @@ namespace PuntajeClases
         //----------------------------------------------------------
         // BACK UP   
         //----------------------------------------------------------
+        private static void AdministrarBackUps()
+        {
+            Console.WriteLine("Que hacemos con los BackUps?");
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("1. Crear nuevo BackUp");
+            Console.WriteLine("2. Mostrar todos los BackUps");
+            Console.WriteLine("3. Mostrar ultimo BackUp");
+
+            switch (IngresoRespuesta(1, 3))
+            {
+                case 1:
+                    CrearBackUp();
+                    break;
+                case 2:
+                    MostrarTodosBackUps();
+                    break;
+                case 3:
+                    MostrarUltimoBackUp();
+                    break;
+            }
+        }
         private static void CrearBackUp()
         {
             try
@@ -1578,6 +1601,38 @@ namespace PuntajeClases
             for (int i = 1; i < 5; i++)
             {
                 w.Cells[1, i] = GetValorTitulo(i+5);
+            }
+        }
+        private static void MostrarUltimoBackUp()
+        {
+            DirectoryInfo di = new DirectoryInfo(@"C:\Users\matia\source\repos\Sol_Puntaje\PuntajeClases\BackUps\");
+            FileInfo[] files = di.GetFiles();
+            Console.WriteLine("El ultimo BackUp registrado es: " + ObtenerUltimoBackUp(files).Name);
+        }
+        private static FileInfo ObtenerUltimoBackUp(FileInfo[] files)
+        {
+            FileInfo mayor = files[0];
+
+            for(int i = 1; i < files.Length; i++)
+            {
+                if (Fecha.EsBackUpMayorFecha(files[i],mayor))
+                {
+                    mayor = files[i];
+                }
+            }
+
+            return mayor;
+        }
+        private static void MostrarTodosBackUps()
+        {
+            DirectoryInfo di = new DirectoryInfo(@"C:\Users\matia\source\repos\Sol_Puntaje\PuntajeClases\BackUps\");
+            FileInfo[] files = di.GetFiles();
+
+            Console.WriteLine("Mostrando los BackUps hechos hasta ahora:");
+            int cont = 0;
+            foreach(FileInfo f in files) {
+                cont++;
+                Console.WriteLine(cont+". "+f.Name);
             }
         }
     }
