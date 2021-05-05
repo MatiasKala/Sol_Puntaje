@@ -294,7 +294,7 @@ namespace PuntajeClases
             bool ok = false;
 
             char[] fecha1 = file1.Name.Substring(8).ToCharArray();
-            char[] fecha2 = file2.Name.Substring(8).ToCharArray(); ;
+            char[] fecha2 = file2.Name.Substring(8).ToCharArray(); 
 
             int anio1 = ConseguirNumeroPorArray(fecha1, 8, 9);
             int anio2 = ConseguirNumeroPorArray(fecha2, 8, 9);

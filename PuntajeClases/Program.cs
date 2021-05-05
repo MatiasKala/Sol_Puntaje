@@ -183,13 +183,12 @@ namespace PuntajeClases
             Console.WriteLine("15. Mostrar clases por materia");
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("\n");
-            int rta = IngresoRespuesta(1, 15,99,100);
             int mes;
             int cuatri;
 
             try
             {
-                switch (rta)
+                switch (IngresoRespuesta(1, 15, 99, 100))
                 {
                     case 1:
                         MostrarClasesMes(DateTime.Now.Month, DateTime.Now.Year);
@@ -769,7 +768,7 @@ namespace PuntajeClases
                 Materias m = (Materias)materias[i];
 
                 Console.WriteLine("Materia '" + m.Descripcion + "' Profesor " + m.Profesor);
-                if (m.Ayudante != null)
+                if (m.Ayudante != null && m.Ayudante.Length!=0)
                 {
                     Console.WriteLine("Ayudante:" + m.Ayudante);
                 }
