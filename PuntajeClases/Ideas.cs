@@ -30,7 +30,7 @@ namespace PuntajeClases
         Se podria implementar dentro de las consultas de datos por numero de mes que cada numero de 
         mes (1-12) muestre un nombre de mes diferente (Enero-Diciembre)
 
-        EN CURSO :S
+        HECHO :P
 
         */
     }
