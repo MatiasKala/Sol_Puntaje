@@ -332,7 +332,6 @@ namespace PuntajeClases
 
             return ok;
         }
-
         private static int ConseguirNumeroPorArray(char[] fecha, int posicion1, int posicion2)
         {
             int decena = int.Parse(fecha[posicion1].ToString()) * 10;

@@ -247,7 +247,7 @@ namespace PuntajeClases
                         MostrarProfesores();
                         break;
                     case 15:
-                        MostrarClases(ObtenerClasesOrdenadasShell(ObtenerClasesPorCateg(IngresarCategoria("De que categoria vemos las clases?"))));
+                        MostrarClases(ObtenerClasesOrdenadasShell(ObtenerClasesPorCateg(IngresarCategoria("De que materia vemos las clases?"))));
                         break;
                     case 99:
                         OpcionSecreta();
@@ -352,7 +352,7 @@ namespace PuntajeClases
             }
             return retorno;
         }
-
+       
         //private static void OrdenarPromediosBurbuja(double[] promValores)
         //{
 
@@ -590,17 +590,19 @@ namespace PuntajeClases
                 }
             }
 
+            var nombreMes = ObtenerNombreMesPorNumero(month);
+
             if (clasesDelMes.Count != 0)
             {
 
                 double promedio = ObtenerPromedio(clasesDelMes);
 
-                Console.WriteLine("\nEl promedio de puntaje en las clases del mes numero " + month + " es de " + promedio + "\n");
+                Console.WriteLine("\nEl promedio de puntaje en las clases del mes numero " + nombreMes + " es de " + promedio + "\n");
 
             }
             else
             {
-                Console.WriteLine("No hay clases del mes " + month + " del " + year);
+                Console.WriteLine("No hay clases del mes " + nombreMes + " del " + year);
             }
 
         }
@@ -626,6 +628,9 @@ namespace PuntajeClases
                 }
             }
 
+            var nombreMes = ObtenerNombreMesPorNumero(month);
+
+
             if (clasesDeMes.Count != 0)
             {
 
@@ -633,12 +638,12 @@ namespace PuntajeClases
 
                 Console.WriteLine();
 
-                MostrarClases(mejorClase,"\nMostrando la/s clase/s con mejor puntaje del mes numero " + month + "\n");
+                MostrarClases(mejorClase,"\nMostrando la/s clase/s con mejor puntaje del mes " + nombreMes + "\n");
 
             }
             else
             {
-                Console.WriteLine("No hay clases del mes " + month + " del " + year);
+                Console.WriteLine("No hay clases del mes " + nombreMes + " del " + year);
 
             }
 
@@ -709,15 +714,17 @@ namespace PuntajeClases
 
             }
 
+            var nombreMes = ObtenerNombreMesPorNumero(month);
+
             if (clasesDelMes.Count != 0)
             {
 
-                MostrarClases(clasesDelMes, "\nMostrando clases del mes numero " + month + "\n");
+                MostrarClases(clasesDelMes, "\nMostrando clases del mes " + nombreMes + "\n");
 
             }
             else
             {
-                Console.WriteLine("No hay clases del mes " + month + " del " + year);
+                Console.WriteLine("No hay clases del mes " + nombreMes + " del " + year);
             }
 
         }
@@ -1455,7 +1462,37 @@ namespace PuntajeClases
             Console.WriteLine("Borrada");
             }
         }
-
+        private static string ObtenerNombreMesPorNumero(int month)
+        {
+            switch (month)
+            {
+                case 1:
+                    return "Enero";
+                case 2:
+                    return "Febrero";
+                case 3:
+                    return "Marzo";
+                case 4:
+                    return "Abril";
+                case 5:
+                    return "Mayo";
+                case 6:
+                    return "Junio";
+                case 7:
+                    return "Julio";
+                case 8:
+                    return "Agosto";
+                case 9:
+                    return "Septiembre";
+                case 10:
+                    return "Octubre";
+                case 11:
+                    return "Noviembre";
+                case 12:
+                    return "Diciembre";
+            }
+            throw new ArgumentException("No existe el mes numero"+month);
+        }
         //----------------------------------------------------------
         // BACK UP   
         //----------------------------------------------------------
