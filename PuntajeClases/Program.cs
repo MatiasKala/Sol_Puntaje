@@ -1651,7 +1651,7 @@ namespace PuntajeClases
 
             for(int i = 1; i < files.Length; i++)
             {
-                if (Fecha.EsBackUpMayorFecha(files[i],mayor))
+                if (files[i].Extension == ".xlsx" && Fecha.EsBackUpMayorFecha(files[i],mayor))
                 {
                     mayor = files[i];
                 }
