@@ -15,8 +15,8 @@ namespace PuntajeClases
             Dictionary<DayOfWeek, string> dic = new Dictionary<DayOfWeek, string>();
 
             dic.Add(DayOfWeek.Monday, CasoLunes());
-            dic.Add(DayOfWeek.Tuesday, "PR2");
-            dic.Add(DayOfWeek.Wednesday, "TP2");
+            dic.Add(DayOfWeek.Tuesday, CasoMartes());
+            dic.Add(DayOfWeek.Wednesday, CasoMiercoles());
             dic.Add(DayOfWeek.Thursday, CasoJueves());
             dic.Add(DayOfWeek.Friday, null);
             dic.Add(DayOfWeek.Saturday,null);
@@ -28,20 +28,39 @@ namespace PuntajeClases
         {
             string retorno = null;
 
-            if (DateTime.Now.Hour >= 23)
+            if (DateTime.Now.Hour >= 22 && DateTime.Now.Hour != 0)
             {
-                retorno = "BD2";
-            }
-            else if (DateTime.Now.Hour <19)
-            {
-                retorno = "PIC";
+                retorno = "PR3";
             }
             else
             {
-                retorno = "AMS";
+                retorno = "PIC";
             }
 
             return retorno;
+        }
+        private static string CasoMartes()
+        {
+            string retorno = null;
+
+            if (DateTime.Now.Hour >= 22 && DateTime.Now.Hour != 0)
+            {
+                retorno = "CSO";
+            }
+            else if (DateTime.Now.Hour >= 21 )
+            {
+                retorno = "SIS";
+            }
+            else 
+            {
+                retorno = "EJU";
+            }
+
+            return retorno;
+        }
+        private static string CasoMiercoles()
+        {
+            return "PFI";
         }
         private static string CasoJueves()
         {
@@ -49,7 +68,7 @@ namespace PuntajeClases
 
             if (DateTime.Now.Hour >= 20)
             {
-                retorno = "NT2";
+                retorno = "TP3";
             }
             else
             {
