@@ -1039,14 +1039,15 @@ namespace PuntajeClases
         private static void EditarMateria(Materias m)
         {
 
-            int eleccion = IngresoRespuesta(0, 7, "Que modificamos de " + m.Descripcion + "?\n" +
+            int eleccion = IngresoRespuesta(0, 7,"Que modificamos de "+m.Descripcion+"?\n" +
                 "1.Nombre de la materia\n" +
                 "2.Abreviatura\n" +
                 "3.Año\n" +
                 "4.Epoca del año\n" +
                 "5.Profesor\n" +
-                "6.Ayudante\n" +
+                "6.Ayudante\n"+
                 "7.Institucion");
+
 
             while (eleccion != 0)
             {
