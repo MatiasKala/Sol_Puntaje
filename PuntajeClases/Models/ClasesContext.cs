@@ -74,6 +74,10 @@ namespace PuntajeClases.Models
                     .HasMaxLength(40)
                     .IsFixedLength();
 
+                entity.Property(e => e.Institucion)
+                    .HasMaxLength(70)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Profesor).HasMaxLength(50);
 
                 entity.Property(e => e.TiempoAnio)

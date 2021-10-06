@@ -993,7 +993,7 @@ namespace PuntajeClases
             m.TiempoAnio = Ingresar("Ingrese en que tiempo del año se cursa la materia (Ej 1er Cuatrimestre)");
             m.Profesor = Ingresar("Ingrese el nombre del profesor de la materia");
             m.Ayudante = Ingresar("Ingrese el ayudante de la materia (En caso de no haberlo, no ingrese nada)");
-            
+            m.Institucion = Ingresar("Ingrese la institucion en la que se da la clase");
             try
             {
                 context.Add(m);
@@ -1039,13 +1039,14 @@ namespace PuntajeClases
         private static void EditarMateria(Materias m)
         {
 
-            int eleccion = IngresoRespuesta(0, 6,"Que modificamos de "+m.Descripcion+"?\n" +
+            int eleccion = IngresoRespuesta(0, 7, "Que modificamos de " + m.Descripcion + "?\n" +
                 "1.Nombre de la materia\n" +
                 "2.Abreviatura\n" +
                 "3.Año\n" +
                 "4.Epoca del año\n" +
                 "5.Profesor\n" +
-                "6.Ayudante");
+                "6.Ayudante\n" +
+                "7.Institucion");
 
             while (eleccion != 0)
             {
@@ -1069,6 +1070,9 @@ namespace PuntajeClases
                     case 6:
                         m.Ayudante = Ingresar("Ingrese el ayudante de la materia (En caso de no haberlo, no ingrese nada)");
                         break;
+                    case 7:
+                        m.Institucion= Ingresar("Ingrese la institucion en la que se da la clase");
+                        break;
                 }
                 Console.WriteLine("Desea cambiar algo mas?\n0. Salir\n" +
                 "1.Nombre de la materia\n" +
@@ -1076,8 +1080,9 @@ namespace PuntajeClases
                 "3.Año\n" +
                 "4.Epoca del año\n" +
                 "5.Profesor\n" +
-                "6.Ayudante");
-                eleccion = IngresoRespuesta(0, 6);
+                "6.Ayudante\n"+
+                "7.Institucion");
+                eleccion = IngresoRespuesta(0, 7);
             }
 
             try

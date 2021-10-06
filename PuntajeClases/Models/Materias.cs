@@ -16,7 +16,9 @@ namespace PuntajeClases.Models
         public string Ayudante { get; set; }
         public int Anio { get; set; }
         public string TiempoAnio { get; set; }
+        public string Institucion { get; set; }
 
         public virtual ICollection<Clases> Clases { get; set; }
+
     }
 }
